@@ -52,9 +52,3 @@ You will need an R environment with the necessary packages installed to run the 
 ## 📁 Output
 
 The output consists of the filtered gVCF file based on the specified DP, missing data and genotype frequency thresholds
-
----
-
-## 📚 Example
-
-For a real-world example, check the `.rmd` and `.html` files, which show the pipeline results for the rat dataset on the Y haploid chromosome.
