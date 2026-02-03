@@ -11,8 +11,6 @@ Run GATK on a list of samples.
 
 ### 📂 Input (see details format in the sh script)
 
-`sample_name` = your list of sample
-
 `bam file` = absolute path to bam file
 
 `Local_PATH` = Root of working dir
@@ -35,9 +33,8 @@ Runs variant calling for each sample provided in the list. The loop launches a j
 
 ### 📤 Output of hapltypecaller : 
 
-- A folder is created for each sample: `samplesX_step1_variantcalling`
-  
-- A file `${name}_gatk.vcf.gz` is created in each folder
+
+- A file `${name}_gatk.vcf.gz` is created for each sample
 
 
 ## ⏭️ Next steps are divided in two ways  : 
