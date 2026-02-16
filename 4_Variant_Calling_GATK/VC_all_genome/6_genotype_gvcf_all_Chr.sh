@@ -1,55 +1,61 @@
-#!/usr/bin/bash
-#SBATCH --clusters=mesopsl1
-#SBATCH --account=gay
-#SBATCH --partition=def
-#SBATCH --qos=mesopsl1_def_long
+#!/bin/bash
+#SBATCH --job-name=SCAFF_genotyping
+#SBATCH --partition=bigm
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=400GB
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=10
-#SBATCH --job-name=genotyping
-#SBATCH --time=56:00:00
-#SBATCH -o genotyping.o
-#SBATCH -e genotyping.e
+#SBATCH --array=1-19%10
+#SBATCH --time=96:00:00
+#SBATCH -o Scaff_geno_%a.out
+#SBATCH -e Scaff_geno_%a.err
 
 # IMPORT MODULE
-module load gcc/9.2.0
-module load samtools/1.10
-module load gatk/4.2.0.0
+#################
+# PATH to GATK (if not loadable in cluster)
+gatk="/scratch/gaye/software/gatk-4.6.2.0/gatk-package-4.6.2.0-local.jar"
+module load samtools/1.22.1/gcc
+module load java/22.0.2
+module load bwa
 
-#==================#
-# Load Directories
-#==================#
-# don't know why but I can't manage to create variable with path and input / output. I have to write the path directly in the GATK command line
+# SET YOUR VARIABLE
+###################
 
-# Just as a reminder, those are paths to load in the GATK command #
-# folder of DBImport/DB : (with three /// at the begining) 
-# Do not use if you use combinegVCF
-DB="///travail/egay/capture_analysis_GWS/Variant_Calling/GATK/DB_Import/DB/"
+# Path to reference assembly used in the mapping step
+Genome="/scratch/gaye/RADSeq_JC/ReferenceGenome/GCF_011800845.1_UG_Zviv_1_genomic.II.fna"
 
-# Temporary path (optional if you have a OOM kill event)
-Temp_path="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/Temp/"
+# Interval list file contains all contig/chr/scaffold you want to do the calling on. Put all your contig name if you want to do the calling in all the genome
+Intervall_list="/scratch/gaye/RADSeq_JC/ReferenceGenome/intervall.list"
 
-# PATH to the reference genome fasta file (masked or not masked)
-Genome="/travail/egay/Genome_Reference/CarCar2.pri.cur.20210205.fasta"
+# IF YOU XXANT TO PARALELLISE BY SCAFFOLD
+# File with one scaffold or chromosome per lines
+mapfile sc_list < <(cat $Intervall_list)
 
-# interval list (to be mentioned even if you do your calling on all your chr) : if you need to subset your vcf 
-interval_list="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/interval.list" 
+idx=$((SLURM_ARRAY_TASK_ID-1))
 
-Output="/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/VCF_214_samples_interval.vcf.gz"
+curren_sc="${sc_list[$idx]//[[:space:]]/}"
 
-# create VCF folder outputs
-mkdir "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/Temp/"
+echo ${curren_sc}
+
+# GET Vcf from previous 'combine' step. 
+VCFs_PATH="/scratch/gaye/RADSeq_JC/VC/Combine_by_SC/"
+VCF_name="${VCFs_PATH}${curren_sc}.vcf.gz"
+echo ${VCF_name}
+
+# output
+VCF_output_path="/scratch/gaye/RADSeq_JC/VC/genotyping/"
+VCf_output_name="${VCF_output_path}${curren_sc}.raw.vcf.gz"
+echo ${VCf_output_name}
+
+# set the temp dir
+temp_dir="/scratch/gaye/RADSeq_JC/VC/genotyping/temp"
 
 #==================#
 # Run genotyping
 #==================#
-
-gatk --java-options "-Xmx100g" GenotypeGVCFs \
--R "/travail/egay/Genome_Reference/CarCar2.pri.cur.20210205.fasta" \
--V gendb:///travail/egay/capture_analysis_GWS/Variant_Calling/GATK/DB_Import/DB/ \ # if you used CombinegVCF just give the absolute path of the all.VCF.gz
--O "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/VCF_214_samples_interval.vcf.gz" \
-# --tmp-dir "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/Temp/" \ # if needed
+java "-Xmx400g" -jar $gatk GenotypeGVCFs \
+-R ${Genome} \
+-V ${VCF_name} \
+-O ${VCf_output_name} \
+--tmp-dir ${temp_dir} \
 --include-non-variant-sites true \
---sample-ploidy 1 \
-# -L "/travail/egay/capture_analysis_GWS/Variant_Calling/GATK/VCF_214samples/interval.list" # if you need to subset your vcf
-
-
+--sample-ploidy 2
