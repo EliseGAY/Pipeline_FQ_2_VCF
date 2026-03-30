@@ -36,10 +36,3 @@ Runs variant calling for each sample provided in the list. The loop launches a j
 
 - A file `${name}_gatk.vcf.gz` is created for each sample
 
-
-## ⏭️ Next steps are divided in two ways  : 
-
-- VC_allgenome : recommanded to run the VC in the whole genome at once (<1Go)
-
-- VC_loop_chromosome : recommanded if genome is too large (>1Go) to run VC in one raw
-
