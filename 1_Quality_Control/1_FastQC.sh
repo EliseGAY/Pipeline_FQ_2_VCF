@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=FQC
-#SBATCH --partition=std
+#SBATCH --partition=fast
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=10GB
 #SBATCH --nodes=1
