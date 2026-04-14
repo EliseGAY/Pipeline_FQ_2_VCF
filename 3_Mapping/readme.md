@@ -1,16 +1,11 @@
-# Run TRIMMOMATIC  
-
-## Author  
-**Elise GAY**  
-📅 *02/2022*  
-
+# Run BWA 
 ---  
 
 ## 📌 Aim  
 Run BWA
 
 `1_index.sh`
-`1_mapping.sh`
+`2_mapping.sh`
 (optional) `3_Add_samples_ID.sh`
 
 ## 📂 Input  
@@ -30,9 +25,8 @@ run :
 
 Fill the several variables at the begining of the script (adapt variable declaration if necessary):
 
-`sample_name` = your list of sample
+`Basename_samples` = your list of sample
 `Local_PATH` = Root of working dir
-`Picard` = Path to Jar file
 `Temp_duplicates_folder` = Path to temp folder 
 `DIR_samples` = Path to bam files
 `fastq_R1` = R1 name
@@ -41,11 +35,9 @@ Fill the several variables at the begining of the script (adapt variable declara
 
 run :
 
-`sh mapping.sh`
+`sbatch mapping.sh`
 
 *️⃣ Steps by steps : 
-
-`sh mapping.sh` : Loop over the sample list and launch as much job as samples number
 
 - Mapping with BWA
 
@@ -54,8 +46,6 @@ run :
 - mark duplicated read with PICARD
 
 - get several statistic with samtools 
-
-
 
 ## 📤 Output
 
