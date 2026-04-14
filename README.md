@@ -14,11 +14,6 @@ Each folder contains generic scripts and a `README.md` file with instructions fo
 2. **Trimming Fastq**: Read trimming using `Trimmomatic`
 3. **Mapping**: Mapping and BAM preprocessing using `BWA`, `Picard`, and `Samtools`
 4. **Variant Calling**: Variant calling using `GATK`
-
-  i. All genome at once
-
-  ii. Loop by chr for large genome
-  
 7. **gVCF Filtering**: Filtering of gVCF files using `GATK`
 8. **Depth & Genotype Filters**: Visualization and filtering of sequencing depth and genotype frequencies using `R`
 
