@@ -1,42 +1,46 @@
-#!/usr/bin/bash
+#!/bin/bash
+#SBATCH --job-name=FQC
+#SBATCH --partition=std
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=10GB
+#SBATCH --nodes=1
+#SBATCH --array=1-8
+#SBATCH --time=04:00:00
+#SBATCH -o QC_%a.out
+#SBATCH -e QC_%a.err
 
-#=============#
-# Directories
-#=============#
+# IMPORT MODULE
+#################
+module load fastqc
 
-# INPUT FASTQ DIRECTORY
-# Put all the fastq files you want to analyze in the 'RAWDATA/' directory
-Dir="/work/egay/RAWDATA/"
+# SET YOUR VARIABLE
+###################
+
+# Path to Fastq Folder
+Fq_Path="/PATH_TO_FQ/"
+
+# Get job number index (minus one : list are 0-based index in bash)
+idx=$((SLURM_ARRAY_TASK_ID-1))
+
+# BAM AND SAMPLE NAME EXTRACTION
+####################################
+
+# Create a list of Fq file in the "Fq_file_list"
+mapfile -t Fq_file_list < <(find ${Fq_Path} -maxdepth 1 -name "*.fastq.gz" | sort -V)
+
+# get the current index of the job list (iterate over 1 to 8)
+current_Fq_file="${Fq_file_list[$idx]}"
 
 #=============#
 # fastqc
 #=============#
 
-# GET FASTQ FILES LIST
-fastq_files=$(ls ${Dir} | grep "fastq.gz")
-
 # PRINT FASTQ FILE LIST TO CHECK
-echo $fastq_files
+echo $current_Fq_file
 
-# LOOP ON FASTQ FILE NAME + CREATION OF *_fastqc.sh SCRIPT FOR EACH FASTQ FILE + CREATE A JOB FOR EACH *_fastqc.sh ON THE CLUSTER
-for file in $fastq_files
-do
-    cat > ${file}_fastqc.sh << EOF
-#!/bin/bash
-#SBATCH -V
-#SBATCH --nodes=2
-#SBATCH --time=01:30:00
-#SBATCH --tasks-per-node=1
-#SBATCH --mem-per-cpu=5G
-#SBATCH -o fastqc.out
-#SBATCH -e fastqc.err
-#SBATCH -J fastqc
-
-# IMPORT MODULE
+# load FAstqc module
 module load bioinfo/FastQC_v0.11.7
 
-fastqc -o fastqc_trim -t 16 $Dir$file
-
-EOF
-    sbatch ${file}_fastqc.sh
-done
+# run fastqc
+mkdir -p fastqc
+fastqc -o fastqc -t 4 $current_Fq_file
