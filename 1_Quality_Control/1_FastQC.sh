@@ -38,9 +38,6 @@ current_Fq_file="${Fq_file_list[$idx]}"
 # PRINT FASTQ FILE LIST TO CHECK
 echo $current_Fq_file
 
-# load FAstqc module
-module load bioinfo/FastQC_v0.11.7
-
 # run fastqc
 mkdir -p fastqc
 fastqc -o fastqc -t 4 $current_Fq_file
