@@ -24,9 +24,6 @@ Basename_samples=("samples_1 samples_2, samples_n")
 # Absolute Path of your local directory (where the script is launch)
 Local_PATH="/scratch/gaye/Jardin_Commun/Pipeline_FQ_2_VCF/3_Mapping/"
 
-# Temp folder to stock temp file in markduplicates
-Temp_duplicates_folder=${Local_PATH}"/TMP"
-
 # Get the current sample idx
 idx=$((SLURM_ARRAY_TASK_ID-1))
 current_sample="${Basename_samples[$idx]}"
@@ -41,9 +38,9 @@ fastq_R2=${DIR_samples}${current_sample}_R2.trim.paired.fastq.gz
 # PATH to the reference genome fasta file
 Genome="/store/gaye/genome_ref/Genome/XXXXX.fasta"
 
-# create temp directory
-temp_folder="/scratch/gaye/Jardin_Commun/Pipeline_FQ_2_VCF/3_Mapping/temp"
-mkdir -p ${temp_folder}
+# Temp folder to stock temp file in markduplicates
+Temp_duplicates_folder=${Local_PATH}"/TMP"
+mkdir -p ${Temp_duplicates_folder}
 
 # 1. MAPPING STEP
 ##################
