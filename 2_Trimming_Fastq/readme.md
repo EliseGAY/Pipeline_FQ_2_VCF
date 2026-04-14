@@ -16,7 +16,7 @@ Trim Illumina sequences.
 - Uses **Trimmomatic** with standard parameters for paired-end Illumina sequences:  
   ```plaintext
   ILLUMINACLIP:${Adapter}:2:30:10 SLIDINGWINDOW:4:15 MINLEN:100 LEADING:3 TRAILING:3```
-Adapted for Genotoul cluster with SLURM command.
+Adapted for MeSU cluster with SLURM command.
 To run the script on the cluster:
 
 Note: The command
