@@ -19,8 +19,9 @@ module load java/22.0.2
 # Path to Trimmomatic JAR file : sometimes the jar file have to be downloaded in your local account
 # Trimmomatic="/softs/apps/trimmomatic/0.39/java/bin/trimmomatic"
 
-# Chose the adapter.fasta file corresponding to your data. To see possibilities run : "ll /softs/apps/trimmomatic/0.39/java/adapters/"
-Adapter="/softs/apps/trimmomatic/0.39/java/adapters/"
+# Chose the adapter.fasta file corresponding to your data.
+# To check for possibilities run : "ll /softs/apps/trimmomatic/0.39/java/adapters/"
+Adapter="/softs/apps/trimmomatic/0.39/java/adapters/XXX.fasta"
 
 # Input FASTQ directory
 fastq_path="/PATH_TO_FASTQ/"
@@ -28,14 +29,10 @@ fastq_path="/PATH_TO_FASTQ/"
 # Output directory
 output_path="/scratch/gaye/Jardin_Commun/Pipeline_FQ_2_VCF/2_Trimming_Fastq"
 
-# Get job number index (minus one: lists are 0-based index in bash)
-idx=$((SLURM_ARRAY_TASK_ID-1))
-
-# SAMPLE NAME EXTRACTION
-########################
 # Create array of sample basenames
 sample_list=("samples_1" "samples_2" "samples_n")
-
+# Get job number index (minus one: lists are 0-based index in bash)
+idx=$((SLURM_ARRAY_TASK_ID-1))
 # Index with job number to iterate over samples
 sample="${sample_list[$idx]}"
 
@@ -56,7 +53,7 @@ echo "Input R2: ${fastq_path}${fastq_R2}"
 
 # Run Trimmomatic
 #################
-java -Xmx100g -jar ${Trimmomatic} PE \
+java -Xmx100g -jar PE \
     -threads 20 \
     -phred33 \
     ${fastq_path}${fastq_R1} \
