@@ -1,9 +1,4 @@
 # Run TRIMMOMATIC  
-
-## Author  
-**Elise GAY**  
-📅 *02/2022*  
-
 ---  
 
 ## 📌 Aim  
@@ -24,12 +19,8 @@ Trim Illumina sequences.
 Adapted for Genotoul cluster with SLURM command.
 To run the script on the cluster:
 
-```sh trim.sh```
-
 Note: The command
-```sbatch script.sh```
-
-is included inside trim.sh itself (line 53) to run one SLURM script per sample.
+```sbatch trim.sh```
 
 ## 📤 Output
 Four FASTQ.gz files:
