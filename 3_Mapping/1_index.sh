@@ -9,19 +9,19 @@
 #SBATCH --node=1
 
 # IMPORT MODULE
-module load bioinfo/bwa-0.7.17
+module load bwa-0.7.17
 
 #=========================#
 # Load Path and file name
 #=========================#
 
 # Absolute path of the genome fasta file
-fasta_file="/work/egay/genome_male/sCarCar2.pri.cur.20210205.fasta"
+fasta_file="/store/gaye/genome_ref/Genome/XXXXX.fasta"
 # create prefix for the indexed files (same as the name of fasta file)
-p="CarCar2.pri.cur.20210205.fasta"
+p="XXXXX.fasta"
 
 #===================#
 # Indexing with BWA
 #===================#
 
-bwa index -p ${p} ${fasta_file} 
+bwa index -p ${p} ${fasta_file}
