@@ -1,9 +1,5 @@
 ## Variant Calling
 
-## Author  
-**Elise GAY**  
-📅 *02/2022*  
-
 ---  
 
 ### 📌 Aim  
