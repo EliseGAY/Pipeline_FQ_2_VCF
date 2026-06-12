@@ -56,8 +56,8 @@ echo "Input R2: ${fastq_path}${fastq_R2}"
 java -Xmx100g -jar PE \
     -threads 20 \
     -phred33 \
-    ${fastq_path}${fastq_R1} \
-    ${fastq_path}${fastq_R2} \
+    ${fastq_R1} \
+    ${fastq_R2} \
     ${output_R1_paired} \
     ${output_R1_unpaired} \
     ${output_R2_paired} \
