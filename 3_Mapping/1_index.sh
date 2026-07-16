@@ -25,3 +25,11 @@ p="XXXXX.fasta"
 #===================#
 
 bwa index -p ${p} ${fasta_file}
+
+# Picard index
+picard CreateSequenceDictionary  R=${fasta_file}
+
+# samtools index
+samtools faidx ${fasta_file}
+
+
